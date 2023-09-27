@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<title>Welcome to Task Management System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdn.jsdelivr.net/npm/jsmediatags@3.9.7/dist/jsmediatags.min.js"></script>
+<style>
+  /* width */
+::-webkit-scrollbar {
+  width: 1px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+.column {
+  float: left;
+  width: 100.3%;
+  margin-bottom: 16px;
+  padding: 0 8px;
+}
+@media (max-width: 650px) {
+  .column {
+    width: 100%;
+    display: block;
+  }
+}
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+.container {
+  padding: 0px 16px;
+}
+.container::after, .row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+<style>
+body { background-color:#fff;text-align:center;justify-content:center;}
+tip {color:#aaa; }
+h1 { color:#aaa; }
+input { padding:2px;font-size:1em;border:.1em solid #ccc; }
+.btn-primary { font-weight:bold;font-size:1em;border:2px solid green;color:green;padding:.5em;border-radius:10px;background-color:#fff; }
+button:hover { cursor:pointer;text-shadow:.1px .1px 10px green;border:3px solid green; }
+label { font-weight:bold;display: inline-block;width: 140px;}
+a { text-decoration:none;}
+
+</style>
+<body>
+
+<h1>Task Management System</h1><br>
+{% block content %}{% endblock content %}
+
+{%  if user.is_authenticated %}
+<!--<p>You are logged in as {{ request.user }}. Click here to <a class="btn-primary" href="{% url 'logout' %}">Log Out</a></p>-->
+{% endif %}
+
+
+<style>#makerhead {transition: bottom .5s;}
+.linkedin { text-decoration:none;color:fff;cursor:pointer; }
+</style>
+<div id="makerhead" onmouseout="this.style.bottom='-30px';" onmouseover="this.style.bottom='0px';" style="text-align: center;padding-top:15px;position: fixed;z-index:9999999;border-radius:10px;bottom:-30px;width: 220px;height:60px;right: 2%;cursor: pointer;line-height: 0;display:block !important;background-color:black;color:white;">
+<a title="Rajinder Purohit" target="_blank" style="font-weight:bold;font-family:Tempus Sans ITC;color:#ffd700;text-shadow: 3px 3px 9px #ffd700;text-decoration:none;background-color:black;" href="">Rajinder Purohit</a>
+<p><a href="https://www.linkedin.com/in/rajinder-purohit" class="linkedin" target="_blank">My LinkedIn</a></p>
+<p>purohitrajinder1999@gmail.com</p>
+</div>
+</body>
+</html>

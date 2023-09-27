@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+.helptext,ul {
+  visibility: hidden;
+  width: 220px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  top: -60px;
+  left: 85%;
+}
+p { position:relative; }
+.error-span { color:red;font-weight:bold; }
+.btn-primary { width:20rem;font-weight:bold;font-size:1em;border:2px solid green;color:green;padding:.5em;border-radius:10px;background-color:#fff; }
+input { display:block;width:20rem;font-weight:bold;font-size:1em;border:2px solid green;padding:.5em;border-radius:10px;background-color:#eee; }
+label { display:block;width:20rem; }
+.btn-link {text-decoration:none;width:30rem;}
+hr { max-width:30rem; }
+fieldset { max-width:30rem;height:80%;position:relative;padding:5px 0px 15px 5px;border:1px solid green;border-radius:50px; }
+</style>
+<center>
+<fieldset>
+<h3>Register</h3>
+    <p>{{ message }}</p>
+    <form method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <button type="submit" class="btn-primary">Register</button>
+    </form>
+
+<br>
+    <hr>
+    <br>
+<a href="/" class="btn-primary btn-link" >Login</a>
+    </fieldset>
+    <script>
+        let para=document.getElementsByTagName("p");
+        for (let x=1;x<para.length;x++){
+            para[x].addEventListener('mouseover', showtip(para[x]) );
+        }
+        function  closetip(parat){ parat.childNodes[5].style.visibility="hidden"; }
+        function  showtip(parat){ parat.childNodes[5].style.visibility="visible";setTimeout(closetip ,2000); }
+    </script>
+    </center>
+{% endblock content %}

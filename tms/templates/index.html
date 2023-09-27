@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div id="page-header" style="color:#fff;padding:0px;position:fixed;top:0;left:0;background:#004c99;width:100%;height:60px;box-shadow:2px 2px 10px #000;z-index:9;" >
+<span style="font-family:gabriola;font-size:1.3em;display:inline-block;padding-left:1.3em;cursor:pointer;"><h3>Task Management System</h3></span>
+    <a href="/logout" style="float:right;color:#fff;font-weight:bold;margin-right:50px;">Logout</a>
+    <a href="/create" style="float:right;color:#fff;font-weight:bold;margin-right:50px;">Add New Task</a>
+
+</div>
+<style>
+    #page-header::before {
+    content: "";
+    position: absolute;
+    top:40px;
+    left:-20px;
+    border-width: 20px;
+    border-style: solid;
+    border-color: #004c99 transparent transparent transparent;
+    Transform:rotateZ(135deg);
+}
+#page-header::after {
+    content: "";
+    position: absolute;
+    top:40px;
+    right:-20px;
+    border-width: 20px;
+    border-style:solid;
+    border-color: transparent transparent #004c99 transparent;
+    Transform:rotateZ(45deg);
+}
+.error-span { color:red;font-weight:bold; }
+        .btn-primary { width:20rem;font-weight:bold;font-size:1em;border:2px solid green;color:green;padding:.5em;border-radius:10px;background-color:#fff; }
+        input,select { display:block;width:20rem;font-weight:bold;font-size:1em;border:2px solid green;padding:.5em;border-radius:10px;background-color:#eee; }
+        label { display:block;width:20rem; }
+        .btn-link {text-decoration:none;width:30rem;}
+        hr { max-width:30rem; }
+        fieldset { max-width:30rem;height:80%;position:relative;padding:5px 0px 15px 5px;border:1px solid green;border-radius:50px; }
+        .delbtn { color:#555;}
+        .delbtn:hover { text-shadow:1px 1px 5px #999; }
+        .inlinebtn { margin:auto;display:inline; }
+    </style>
+
+<h1>Task List</h1>
+<div style="text-align:center;margin:auto;padding:auto;">
+    <input type="search" id="q" class="inlinebtn" onkeyup="getTaskBySearch(this.value)" placeholder="Title/ Description/user" title="at least 3 characters"/>
+    <select  id="fstatus" class="inlinebtn" onchange="getTaskByStatus(this.value);">
+        <option value="">Filter-By-Status</option>
+        <option value="Pending">Pending</option>
+        <option value="In Process">In Process</option>
+        <option value="Completed">Completed</option>
+    </select>
+    <input type="text" id="ddate" onfocus="this.type='date';" onblur="this.type='text';" class="inlinebtn" placeholder="Filter By Due Date: " title="Filter By Due Date"/>
+</div>
+<ol id="tasklist" role="list">
+  {% for x in alltasks %}
+    <li><h2>{{ x.title }}</h2><p>
+        Description: {{ x.description }}<br>
+        {% if x.status == '1' %}
+        Task Status: <span class="statusspan">Pending</span><br>
+        {% elif x.status == '2' %}
+        Task Status: <span class="statusspan">In Process</span><br>
+        {% else %}
+        Task Status: <span class="statusspan">Completed</span><br>
+        {% endif %}
+        Task Assigned To: {{ x.assigned_to }}<br>
+        Task Due Date: {{ x.ddate }}
+    </p>
+        <div style="padding:5px;text-align:right;width:100%;">
+            <a href="#" title="Edit Task" class="btn-primary delbtn">Edit Task</a>
+            <a href="#" title="Delete Task" id="delbtn" class="btn-primary delbtn" onclick="delTask({{ x.id }})">Delete</a>
+        </div>
+    </li>
+  {% endfor %}
+</ol>
+<script>
+    function delTask(taskid){
+        if(confirm("Are you sure, you want to delete this task?")){
+            let xhr=new XMLHttpRequest();
+            xhr.onload = function (){ alert(this.responseText);document.location.reload();};
+            xhr.onerror = function (){ alert(this.responseText)};
+            xhr.open("GET","/delete?taskid="+taskid);
+            xhr.send();
+        }
+    }
+    function getTaskByStatus(status){
+        let tasklist=document.getElementById("tasklist");
+        for(let x=0;x<tasklist.getElementsByTagName("li").length;x++){
+            document.getElementById("tasklist").getElementsByTagName("li")[x].style.display="block";
+        }
+        if(status==""){ return false; }
+        for(let x=0;x<tasklist.getElementsByTagName("li").length;x++){
+            if(document.getElementById("tasklist").getElementsByTagName("li")[x].getElementsByClassName("statusspan")[0].innerText!=status){
+                document.getElementById("tasklist").getElementsByTagName("li")[x].style.display="none";
+            }
+        }
+    }
+    function getTaskBySearch(query){
+        let tasklist=document.getElementById("tasklist");
+        for(let x=0;x<tasklist.getElementsByTagName("li").length;x++){
+            document.getElementById("tasklist").getElementsByTagName("li")[x].style.display="block";
+        }
+        if(query==""){ return false; }
+        if(query<=2){ return false; }
+        for(let x=0;x<tasklist.getElementsByTagName("li").length;x++){
+            if(!tasklist.getElementsByTagName("li")[x].innerHTML.includes(query)){
+                document.getElementById("tasklist").getElementsByTagName("li")[x].style.display="none";
+            }
+        }
+    }
+</script>
+<style>
+    p {
+	margin: 0;
+	line-height: 1.6;
+	color:#555;
+	font-size:1.2em;
+}
+
+ol {
+	list-style: none;
+	counter-reset: list;
+	padding: 0 1rem;
+	z-index:1;
+}
+    li::before {
+	content: '';
+	display: block;
+	width: 100%;
+	height: 1rem;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: linear-gradient(to right,#009900, #005500);
+}
+
+h2 {
+	display: flex;
+	align-items: baseline;
+	margin: 0 0 .5rem;
+	color: rgb(70 70 70);
+}
+
+h2::before {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex: 0 0 auto;
+	margin-right: 1rem;
+	width: 3rem;
+	height: 3rem;
+	content: counter(list);
+	padding: 1rem;
+	border-radius: 50%;
+	background-color: #005500;
+	color: white;
+}
+
+@media (min-width: 40em) {
+	li {
+		margin: 3rem auto;
+		padding: 3rem 2rem 2rem;
+	}
+
+	h2 {
+		font-size: 2.25rem;
+		margin: 0 0 2rem;
+	}
+
+	h2::before {
+		margin-right: 1.5rem;
+	}
+}
+    li { position: relative;
+	counter-increment: list;
+	max-width: 45rem;
+	margin: 2rem auto;
+	padding: 2rem 1rem 1rem;
+	box-shadow: 0.1rem 0.1rem 1.5rem rgba(0, 0, 0, 0.3);
+	border-radius: 0.25rem;
+	overflow: hidden;
+	background-color: white;
+
+	 }
+</style>
+
+{% endblock content %}
